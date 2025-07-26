@@ -1,0 +1,43 @@
+name: Orchestrator CI
+ 
+on:
+  repository_dispatch:
+    types: [single-repo-build, multi-repo-build]
+  issue_comment:
+    types: [created]
+ 
+jobs:
+  handle-build:
+    runs-on: ubuntu-latest
+    steps: 
+      # 处理单仓库触发
+      - name: Parse single-repo request
+        if: ${{ github.event_name == 'repository_dispatch' }}
+        id: parse-single
+        run: |
+          PAYLOAD=$(echo '${{ toJSON(github.event.client_payload) }}' | jq -c '.')
+          echo "payload=$PAYLOAD" >> $GITHUB_OUTPUT
+           
+      # 合并构建请求
+      - name: Prepare build
+        id: prepare
+        run: |
+          if [ "${{ steps.parse-multi.outputs.payload }}" != "" ]; then
+            echo "${{ steps.parse-multi.outputs.payload }}" > payload.json
+          else
+            echo '${{ steps.parse-single.outputs.payload }}' > payload.json
+          fi
+           
+      # 同步所有仓库
+      - name: Sync repositories
+        run: |
+          mkdir -p src
+          cd src
+           
+          # 应用PR变更
+          jq -r '.repos[] | "\(.owner)/\(.repo) \(.pr)"' ../payload.json | while read repo pr; do
+            project_path=$(repo list | grep "$repo" | awk '{print $1}')
+            cd $project_path
+            echo $project_path
+          done
+          
