@@ -31,6 +31,7 @@ jobs:
       # 同步所有仓库
       - name: Sync repositories
         run: |
+          apt-get install repo -y
           mkdir -p src
           cd src
           repo init -u https://github.com/molovexue/repo-orchestrator -m manifests/default.xml
