@@ -35,6 +35,9 @@ jobs:
           mkdir -p src
           cd src
           repo init -u https://github.com/molovexue/repo-orchestrator -m manifests/default.xml
+          pwd
+          ls
+          cat ../payload.json
           # 应用PR变更
           jq -r '.repos[] | "\(.owner)/\(.repo) \(.pr)"' ../payload.json | while read repo pr; do
             project_path=$(repo list | grep "$repo" | awk '{print $1}')
