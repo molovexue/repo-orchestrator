@@ -95,7 +95,7 @@ jobs:
             cd "$project_path"
             
             # 获取PR详细信息
-            PR_JSON=$(curl -s -H "Authorization: Bearer ${{ secrets.ORCHESTRATOR_TOKEN }}" \
+            PR_JSON=$(curl -s -H "Authorization: Bearer ${{ secrets.REPO_ORCHESTRATOR_TOKEN01 }}" \
               "https://api.github.com/repos/$owner/$repo/pulls/$pr")
             
             PR_HEAD_REF=$(echo "$PR_JSON" | jq -r '.head.ref')
@@ -128,7 +128,7 @@ jobs:
  
       - name: Report results
         # env:
-        #   GITHUB_TOKEN: ${{ secrets.ORCHESTRATOR_TOKEN }}
+        #   GITHUB_TOKEN: ${{ secrets.REPO_ORCHESTRATOR_TOKEN01 }}
         run: |
           cd blueos
           CI_STATUS=$([ $? -eq 0 ] && echo "success" || echo "failure")
