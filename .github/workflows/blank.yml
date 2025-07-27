@@ -127,6 +127,7 @@ jobs:
           cd blueos
           ### 执行CI
           echo "start CI"
+          cat just_a_test/01.txt
          
         # 使用超时防止卡死
         timeout-minutes: 120
