@@ -106,7 +106,7 @@ jobs:
             echo "PR head: $PR_HEAD_OWNER/$PR_HEAD_REPO@$PR_HEAD_REF ($PR_HEAD_SHA)"
             
             # 添加远程仓库
-            git remote add pr-remote "https://github.com/$PR_HEAD_OWNER/$PR_HEAD_REPO.git"" || true
+            git remote add pr-remote "https://github.com/$PR_HEAD_OWNER/$PR_HEAD_REPO.git" || true
             git fetch pr-remote
             
             # 创建并切换到PR分支
