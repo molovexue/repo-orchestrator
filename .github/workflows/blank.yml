@@ -120,7 +120,8 @@ jobs:
           done
           
           # 重新同步确保一致性
-          repo sync -j8 --force-sync
+          # repo sync -j8 --force-sync
+          tree
  
       - name: Run CI validation
         run: |
