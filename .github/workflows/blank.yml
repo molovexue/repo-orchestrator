@@ -67,7 +67,7 @@ jobs:
         run: |
           mkdir -p blueos
           cd blueos
-          repo init -u https://github.com/molovexuer/epo-orchestrator -m manifests/default.xml
+          repo init https://github.com/molovexue/repo-orchestrator -m manifests/default.xml
           repo sync -j8 --no-clone-bundle
  
       - name: Apply PR changes
