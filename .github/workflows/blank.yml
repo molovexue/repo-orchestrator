@@ -97,18 +97,23 @@ jobs:
             # 获取PR详细信息
             PR_JSON=$(curl -s -H "Authorization: Bearer ${{ secrets.REPO_ORCHESTRATOR_TOKEN01 }}" \
               "https://api.github.com/repos/$owner/$repo/pulls/$pr")
-            
+              
+            PR_HEAD_OWNER=$(echo "$PR_JSON" | jq -r '.head.repo.owner.login')
+            PR_HEAD_REPO=$(echo "$PR_JSON" | jq -r '.head.repo.name')
             PR_HEAD_REF=$(echo "$PR_JSON" | jq -r '.head.ref')
             PR_HEAD_SHA=$(echo "$PR_JSON" | jq -r '.head.sha')
+
+            echo "PR head: $PR_HEAD_OWNER/$PR_HEAD_REPO@$PR_HEAD_REF ($PR_HEAD_SHA)"
             
             # 添加远程仓库
-            git remote add pr-remote "https://github.com/$owner/$repo.git" || true
+            git remote add pr-remote "https://github.com/$PR_HEAD_OWNER/$PR_HEAD_REPO.git"" || true
             git fetch pr-remote
             
             # 创建并切换到PR分支
             git checkout -b "pr-$pr" "pr-remote/$PR_HEAD_REF"
             
             echo "Applied PR $pr to $project_path"
+            echo "Applied PR $pr from $PR_HEAD_OWNER/$PR_HEAD_REPO"
             
             # 返回到repo根目录
             cd - >/dev/null
