@@ -110,14 +110,15 @@ jobs:
             # 添加远程仓库
             git remote add pr-remote "https://github.com/$PR_HEAD_OWNER/$PR_HEAD_REPO.git" || true
             git fetch pr-remote
+            
+            # 确保主线最新
             MAIN_BRANCH=$(git symbolic-ref refs/remotes/origin/HEAD | sed 's@^refs/remotes/origin/@@')
+            git checkout $MAIN_BRANCH
+            git pull origin $MAIN_BRANCH
             
             # 创建并切换到PR分支
-            git checkout -b "pr-$pr" "pr-remote/$PR_HEAD_REF"
-            # git merge --no-ff "$PR_HEAD_SHA" -m "Merge PR#$pr for CI testing"
-            echo "将PR#$pr变基到最新主线($MAIN_BRANCH)..."
-            git rebase "origin/$MAIN_BRANCH"
-      
+            git checkout -b "pr-$pr"
+            git merge --no-ff "$PR_HEAD_SHA" -m "Merge PR#$pr for CI testing"
             if [ $? -ne 0 ]; then
               echo "::error::Merge conflict in $project_path for PR $pr"
               exit 1
