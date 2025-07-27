@@ -40,7 +40,7 @@ jobs:
             echo "Validating $owner/$repo PR#$pr"
             
             # 检查PR状态
-            PR_JSON=$(curl -s -H "Authorization: Bearer ${{ secrets.ORCHESTRATOR_TOKEN }}" \
+            PR_JSON=$(curl -s -H "Authorization: Bearer ${{ secrets.REPO_ORCHESTRATOR_TOKEN01 }}" \
               "https://api.github.com/repos/$owner/$repo/pulls/$pr")
             
             state=$(echo "$PR_JSON" | jq -r '.state')
