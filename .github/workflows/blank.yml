@@ -113,6 +113,12 @@ jobs:
             
             # 创建并切换到PR分支
             git checkout -b "pr-$pr" "pr-remote/$PR_HEAD_REF"
+            git merge --no-ff "$PR_HEAD_SHA" -m "Merge PR#$pr for CI testing"
+      
+            if [ $? -ne 0 ]; then
+              echo "::error::Merge conflict in $project_path for PR $pr"
+              exit 1
+            fi
             
             echo "Applied PR $pr to $project_path"
             echo "Applied PR $pr from $PR_HEAD_OWNER/$PR_HEAD_REPO"
