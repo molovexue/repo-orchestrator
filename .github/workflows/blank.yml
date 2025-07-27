@@ -70,12 +70,13 @@ jobs:
           mkdir -p blueos
           cd blueos
           repo init https://github.com/molovexue/repo-orchestrator -m manifests/default.xml
-          repo sync -j8 --no-clone-bundle
+          repo sync -j8
  
       - name: Apply PR changes
         run: |
           cd blueos
-           
+          repo forall -c 'git checkout main ; git pull'
+          
           # 处理每个PR
           jq -c '.repos[]' ../payload.json | while read repo_data; do
             owner=$(echo "$repo_data" | jq -r '.owner')
