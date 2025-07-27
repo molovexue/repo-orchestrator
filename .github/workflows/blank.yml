@@ -79,7 +79,7 @@ jobs:
             owner=$(echo "$repo_data" | jq -r '.owner')
             repo=$(echo "$repo_data" | jq -r '.repo')
             pr=$(echo "$repo_data" | jq -r '.pr')
-            repo_path="$owner/$repo"
+            repo_path="$repo"
             
             echo "Processing $repo_path PR#$pr"
             
@@ -139,7 +139,7 @@ jobs:
             pr=$(echo "$repo_data" | jq -r '.pr')
             
             # 获取项目路径和当前SHA
-            project_path=$(repo list | grep "$owner/$repo" | awk '{print $1}')
+            project_path=$(repo list | grep "$repo" | awk '{print $1}')
             cd "$project_path"
             COMMIT_SHA=$(git rev-parse HEAD)
             cd - >/dev/null
